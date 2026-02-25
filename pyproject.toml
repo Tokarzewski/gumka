@@ -1,6 +1,6 @@
 [project]
 name = "gumka"
-version = "0.2.0"
+version = "0.2.1"
 description = "Rule-based disk cleaner for Windows"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -17,6 +17,9 @@ dev = [
     "pytest",
     "ruff"
 ]
+
+[project.urls]
+Source = "https://github.com/Tokarzewski/gumka"
 
 [project.scripts]
 gumka = "gumka.cli.main:app"
