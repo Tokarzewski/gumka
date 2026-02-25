@@ -199,3 +199,8 @@ uv sync --group dev
 uv run pytest
 uv run ruff check src
 ```
+
+## Icon attribution
+
+<a href="https://www.flaticon.com/free-icons/eraser" title="eraser icons">
+Eraser icons created by Freepik - Flaticon</a>
