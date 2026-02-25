@@ -32,12 +32,12 @@ This creates `my_rules.toml`. Open it and add rules:
 [meta]
 name        = "My rules"
 description = "Clean up temp files"
-author      = "Your Name"
+author      = "Bart"           # auto-filled from %USERNAME%
 version     = "1.0.0"
 
 [[rules]]
 name   = "Old downloads"
-path   = "C:/Users/YourName/Downloads"
+path   = "%USERPROFILE%/Downloads"
 match  = { pattern = "**/*.zip", older_than = "30d" }
 action = "trash"
 
@@ -83,15 +83,15 @@ version     = "1.0.0"
 
 [[rules]]
 name   = "Optional rule name"
-path   = "C:/path/to/scan"        # required
-action = "trash"                  # delete | trash | log
+path   = "%USERPROFILE%/path/to/scan"  # required; %VAR% env vars are expanded
+action = "trash"                       # delete | trash | log
 
 # All match fields are optional — omit to match everything in path
 [rules.match]
-pattern    = "**/*.tmp"           # glob pattern
-older_than = "30d"                # 30d, 2w, 12h
+pattern     = "**/*.tmp"          # glob pattern, or a list: ["*.tmp", "*.log"]
+older_than  = "30d"               # 30d, 2w, 12h
 larger_than = "10MB"              # B, KB, MB, GB
-type       = "file"               # file | directory
+type        = "file"              # file | directory
 ```
 
 ### Actions
@@ -104,12 +104,24 @@ type       = "file"               # file | directory
 
 ### Match criteria
 
-| Field        | Examples             | Description                          |
-|--------------|----------------------|--------------------------------------|
-| `pattern`    | `**/*.tmp`, `*.log`  | Glob pattern relative to `path`      |
-| `older_than` | `30d`, `2w`, `12h`   | Only match if last modified before   |
-| `larger_than`| `50MB`, `500KB`      | Only match files above this size     |
-| `type`       | `file`, `directory`  | Restrict to files or directories     |
+| Field        | Examples                          | Description                                     |
+|--------------|-----------------------------------|-------------------------------------------------|
+| `pattern`    | `**/*.tmp`, `["*.exe", "*.msi"]`  | Glob pattern (or list of patterns) relative to `path` |
+| `older_than` | `30d`, `2w`, `12h`                | Only match if last modified before              |
+| `larger_than`| `50MB`, `500KB`                   | Only match files above this size                |
+| `type`       | `file`, `directory`               | Restrict to files or directories                |
+
+### Environment variables in paths
+
+Windows environment variables are expanded in `path` at runtime:
+
+```toml
+path = "%USERPROFILE%/Downloads"        # C:/Users/[USERNAME]/Downloads
+path = "%APPDATA%/Microsoft/Word"       # C:/Users/[USERNAME]/AppData/Roaming/...
+path = "%LOCALAPPDATA%/Google/Chrome"   # C:/Users/[USERNAME]/AppData/Local/...
+path = "%PROGRAMDATA%/SomeApp"          # C:/ProgramData/SomeApp
+path = "%TEMP%"                         # C:/Users/[USERNAME]/AppData/Local/Temp
+```
 
 ## Commands
 
@@ -140,6 +152,7 @@ gumka rules list                          # list installed rule files
 gumka rules open                          # open the rules folder in Explorer
 gumka rules merge <file1> <file2> -o out  # merge multiple rule files
 gumka rules quick-add <path>              # add a trash rule via context menu
+gumka rules env [FILTER]                  # list environment variables usable in paths
 ```
 
 ### `schedules`

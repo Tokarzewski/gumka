@@ -1,4 +1,5 @@
 import logging
+import os
 import re
 from dataclasses import dataclass
 from datetime import datetime, timedelta
@@ -66,17 +67,19 @@ def scan(rules: list[Rule], path_override: str | None = None) -> list[ScanMatch]
     now = datetime.now()
 
     for rule in rules:
-        root = Path(path_override or rule.path)
+        root = Path(os.path.expandvars(path_override or rule.path))
         if not root.exists():
             logger.warning(f"Path does not exist, skipping: {root}")
             continue
 
-        pattern = rule.match.pattern or "**/*"
-        try:
-            candidates = list(root.glob(pattern))
-        except Exception as e:
-            logger.warning(f"Glob error on {root!r} with pattern {pattern!r}: {e}")
-            continue
+        raw_pattern = rule.match.pattern
+        patterns = raw_pattern if isinstance(raw_pattern, list) else [raw_pattern or "**/*"]
+        candidates: list[Path] = []
+        for pattern in patterns:
+            try:
+                candidates.extend(root.glob(pattern))
+            except Exception as e:
+                logger.warning(f"Glob error on {root!r} with pattern {pattern!r}: {e}")
 
         for candidate in candidates:
             if candidate in seen:

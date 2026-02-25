@@ -5,9 +5,7 @@ from pathlib import Path
 
 
 def get_app_dir() -> Path:
-    appdata = os.environ.get("APPDATA", "")
-    base = Path(appdata) if appdata else Path.home() / "AppData" / "Roaming"
-    app_dir = base / "gumka"
+    app_dir = Path(os.environ["APPDATA"]) / "gumka"
     app_dir.mkdir(parents=True, exist_ok=True)
     return app_dir
 

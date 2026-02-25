@@ -17,12 +17,12 @@ _RULE_TEMPLATE = """\
 [meta]
 name        = "{name}"
 description = ""
-author      = ""
+author      = "{author}"
 version     = "1.0.0"
 
 # [[rules]]
 # name   = "Example rule"
-# path   = "C:/Users/YourName/Downloads"
+# path   = "%USERPROFILE%/Downloads"
 # match  = {{ pattern = "**/*.tmp", older_than = "30d" }}
 # action = "delete"   # delete | trash | log
 """
@@ -47,7 +47,8 @@ def cmd_rules_new(
     if output.exists():
         err_console.print(f"[red]File already exists:[/red] {output}")
         raise typer.Exit(1)
-    output.write_text(_RULE_TEMPLATE.format(name=name), encoding="utf-8")
+    author = os.environ.get("USERNAME", "")
+    output.write_text(_RULE_TEMPLATE.format(name=name, author=author), encoding="utf-8")
     console.print(f"[green]Created:[/green] {output}")
 
 
@@ -155,3 +156,33 @@ def cmd_rules_quick_add(
             f.write(rule_block)
 
     console.print(f"[green]✓ Rule added:[/green] [bold]{path_str}[/bold] → {dest}")
+
+
+@rules_app.command(name="env")
+def cmd_rules_env(
+    filter: Annotated[
+        str | None,
+        typer.Argument(help="Optional substring to filter variable names (case-insensitive)."),
+    ] = None,
+) -> None:
+    """List Windows environment variables for use in rule file paths."""
+    from rich.table import Table
+
+    items = sorted(os.environ.items())
+
+    if filter:
+        needle = filter.lower()
+        items = [(k, v) for k, v in items if needle in k.lower()]
+
+    if not items:
+        console.print("[yellow]No matching environment variables found.[/yellow]")
+        return
+
+    t = Table(show_lines=False, highlight=True)
+    t.add_column("Name", style="cyan", no_wrap=True)
+    t.add_column("Value")
+
+    for name, value in items:
+        t.add_row(name, value)
+
+    console.print(t)

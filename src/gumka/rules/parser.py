@@ -6,7 +6,7 @@ from typing import Literal
 
 @dataclass
 class MatchCriteria:
-    pattern: str | None = None
+    pattern: str | list[str] | None = None
     older_than: str | None = None
     larger_than: str | None = None
     type: Literal["file", "directory"] | None = None
