@@ -1,0 +1,13 @@
+[meta]
+name        = "DesignBuilder"
+description = "Clean up DesignBuilder folders known to collect models"
+author      = "Bart"
+version     = "1.0.0"
+
+[[rules]]
+path   = "C:/Users/thinkpad/Documents/DesignBuilder Data/Backup"
+action = "trash"
+
+[[rules]]
+path   = "C:/ProgramData/DesignBuilder/JobServer/Users/User"
+action = "trash"
