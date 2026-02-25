@@ -1,6 +1,6 @@
 # gumka
 
-**Gumka** (Polish for *eraser*) is a rule-based disk cleaner for Windows. 
+**gumka** (Polish for *eraser*) is a rule-based disk cleaner for Windows. 
 Define TOML rule files that describe which files and folders to target, 
 then scan, clean, or schedule automated runs — all from the command line.
 
