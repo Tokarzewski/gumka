@@ -1,6 +1,8 @@
 # gumka
 
-**Gumka** (Polish for *eraser*) is a rule-based disk cleaner for Windows. Define TOML rule files that describe which files and folders to target, then scan, clean, or schedule automated runs — all from the command line.
+**Gumka** (Polish for *eraser*) is a rule-based disk cleaner for Windows. 
+Define TOML rule files that describe which files and folders to target, 
+then scan, clean, or schedule automated runs — all from the command line.
 
 ## Features
 
@@ -15,14 +17,6 @@
 ```
 pip install gumka
 ```
-
-Or with [uv](https://github.com/astral-sh/uv):
-
-```
-uv tool install gumka
-```
-
-Requires Python 3.11+.
 
 ## Quick start
 
@@ -193,7 +187,7 @@ gumka trash empty [--yes] # empty the Recycle Bin
 ## Development
 
 ```
-git clone https://github.com/yourname/gumka
+git clone https://github.com/Tokarzewski/gumka
 cd gumka
 uv sync --group dev
 uv run pytest
